@@ -53,12 +53,12 @@ public class PlayerController : MonoBehaviour
         // Checking if Player is Moving
         if (horizontal > 0 | horizontal < 0)
         {
+            // Setting the isWalking Bool to True
+            anim.SetBool("isWalking", true);
+
             // Dealing with Player Movement and Sprite Direction 
             if (horizontal > 0 && facingDirection == Vector2.left)
             {
-                // Setting the isWalking Bool to True
-                anim.SetBool("isWalking", true);
-
                 // Chaning the Scale to Rotate Everything on Player
                 FlipX();
 
@@ -68,9 +68,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (horizontal < 0 && facingDirection == Vector2.right)
             {
-                // Setting the isWalking Bool to True
-                anim.SetBool("isWalking", true);
-
                 // Chaning the Scale to Rotate Everything on Player
                 FlipX();
 
