@@ -19,17 +19,33 @@ public class PlayerController : MonoBehaviour
     // Variable to Hold the Player's Speed 
     public int speed;
 
+    // Variable to Hold the Move Force on the Player
+    public float moveForce;
+
+    // Variable to Hold the Jump Force of the Player 
+    public float jumpForce; 
+
     // Variable to get the Player's Facing Direction 
     public Vector2 facingDirection = Vector2.right;
+
+    // Variable to hold the GroundCheck Object
+    public GameObject GroundCheck;
 
 
     // PRIVATE VARIABLES
 
     // Variable to get the Player's Movement 
-    private float horizontal;
+    public float horizontal;
 
     // Different Player Components
     private Animator anim;
+    private Rigidbody2D rbody;
+
+    // Variable to Make sure the Player is Alive 
+    private bool isDead = false;
+
+    // Variable to Prevent the Player from Double Jumping 
+    private bool jump;
 
 
     /*
@@ -41,6 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         // Getting the Player's Components 
         anim = GetComponent<Animator>();
+        rbody = GetComponent<Rigidbody2D>();
 
     } // END OF METHOD 
 
@@ -50,43 +67,46 @@ public class PlayerController : MonoBehaviour
         // Getting the Player's Horizontal Movement 
         horizontal = Input.GetAxis("Horizontal");
 
-        // Checking if Player is Moving
-        if (horizontal > 0 | horizontal < 0)
+        // Checking the Direction the Player is Facing
+        if (horizontal < 0 && facingDirection == Vector2.right)
         {
-            // Setting the isWalking Bool to True
-            anim.SetBool("isWalking", true);
+            // Flipping the Player 
+            FlipX();
 
-            // Dealing with Player Movement and Sprite Direction 
-            if (horizontal > 0 && facingDirection == Vector2.left)
-            {
-                // Chaning the Scale to Rotate Everything on Player
-                FlipX();
-
-                // Flipping the Vector for Bullet Firing
-                facingDirection = Vector2.right;
-
-            }
-            else if (horizontal < 0 && facingDirection == Vector2.right)
-            {
-                // Chaning the Scale to Rotate Everything on Player
-                FlipX();
-
-                // Flipping the Vector for Bullet Firing
-                facingDirection = Vector2.left;
-
-            } // END OF IF/ELSEIF
-
-            // Updating the Player's Transform
-            transform.Translate(new Vector3(horizontal, 0, 0) * speed * Time.deltaTime);
+            // Changing the facingDirection 
+            facingDirection = Vector2.left;
 
         }
-        // Player Not Moving
-        else 
+        else if (horizontal > 0 && facingDirection == Vector2.left)
         {
-            // Setting the isWalking Bool to False
-            anim.SetBool("isWalking", false);
+            // Flipping Player 
+            FlipX();
 
-        } // END OF IF/ELSE
+            // Changing facingDirection 
+            facingDirection = Vector2.right;
+
+        } // END OF IF/ELSEIF
+
+
+        // Checking if the Player is Moving and Setting the Animation 
+        if (horizontal > 0 | horizontal < 0)
+        {
+            // Setting the Walking Animation to True 
+            anim.SetBool("isWalking", true);
+        }
+        else if (horizontal == 0)
+        {
+            // Setting the Walking Animation to False 
+            anim.SetBool("isWalking", false);
+        }
+
+
+        // Checking if the Player is Jumping 
+        if (Input.GetButtonDown("Jump"))
+        {
+            // Setting jump to true
+            jump = true;
+        }
 
 
     } // END OF METHOD 
@@ -95,6 +115,53 @@ public class PlayerController : MonoBehaviour
     /*
      * EXTRA/CUSTOM METHODS
      */
+
+    // Method the Handle the Physics of the Game 
+    private void FixedUpdate()
+    {
+        // As Long as Player is not Dead Do Movement  NOTE: Taken from Mini-Quest 2
+        if (!isDead)
+        {
+            // Creating a RayCast so Player Can't Double Jump
+            RaycastHit2D hitInfo = Physics2D.Raycast(GroundCheck.transform.position, Vector2.down, .25f);
+
+            // Seeing the Raycast; Will Draw it in the Scene
+            Debug.DrawRay(GroundCheck.transform.position, Vector2.down, Color.red, 1f);
+
+            // Player Movement
+            if (rbody.velocity.x < 15 && rbody.velocity.x > -15)
+            { 
+                // Adding Force and Moving Player 
+                rbody.AddForce(Vector2.right * horizontal * moveForce);
+
+            } // END OF IF
+
+
+            // Checking if Player is Jumping and Touching the Ground 
+            if (jump)
+            {
+                if (hitInfo.collider != null)
+                {
+                    // Adding Force to the Player to Jump 
+                    rbody.AddForce(Vector2.up * jumpForce);
+
+                } // END OF IF
+
+                // Resetting the Jump Boolean 
+                jump = false;
+
+            } // END OF IF
+
+
+        } // END OF IF
+
+
+
+
+    } // END OF METHOD 
+
+
+
 
     // Used to Flip the Entire Player Sprite and Entities Attaches (From Mini-Quest 2)
     public void FlipX()
