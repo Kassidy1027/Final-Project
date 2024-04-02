@@ -31,6 +31,12 @@ public class PlayerController : MonoBehaviour
     // Variable to hold the GroundCheck Object
     public GameObject GroundCheck;
 
+    // Variable to hold the Sprite for Attack 
+    public GameObject fire;
+
+    // Variable to Hold the Players FirePoint
+    public Transform firePoint;
+
 
     // PRIVATE VARIABLES
 
@@ -46,6 +52,12 @@ public class PlayerController : MonoBehaviour
 
     // Variable to Prevent the Player from Double Jumping 
     private bool jump;
+
+    // Variable to Slow Player Fire Rate 
+    private float nextTimeToFire = 0;
+
+    // Variable to Delay Time Between Fire 
+    private float fireDelay = .5f;
 
 
     /*
@@ -93,12 +105,14 @@ public class PlayerController : MonoBehaviour
         {
             // Setting the Walking Animation to True 
             anim.SetBool("isWalking", true);
+
         }
         else if (horizontal == 0)
         {
             // Setting the Walking Animation to False 
             anim.SetBool("isWalking", false);
-        }
+
+        } // END OF IF/ELSEIF
 
 
         // Checking if the Player is Jumping 
@@ -106,6 +120,26 @@ public class PlayerController : MonoBehaviour
         {
             // Setting jump to true
             jump = true;
+
+        } // END OF IF 
+
+
+        // Checking if the Fire Button is Pressed
+        if (Input.GetButton("Fire1") && Time.time > nextTimeToFire && !isDead)
+        {
+            // Instantiate the Fire Sprite                      If Statment in one Line (Testing ? True : False)
+            Instantiate(fire, firePoint.position, facingDirection == Vector2.left ? Quaternion.Euler(0, 180, 0) : firePoint.rotation);
+
+            // Setting up Fire Delay 
+            nextTimeToFire = Time.time + fireDelay;
+
+            // Setting the Animator to Show Shooting Animation
+            anim.SetBool("isShooting", true);
+        }
+        else
+        {
+            // Resetting the Shooting Animation 
+            anim.SetBool("isShooting", false);
         }
 
 
@@ -142,15 +176,25 @@ public class PlayerController : MonoBehaviour
             {
                 if (hitInfo.collider != null)
                 {
+                    // Doing the Jump Animation 
+                    anim.SetBool("isJumping", true);
+
                     // Adding Force to the Player to Jump 
                     rbody.AddForce(Vector2.up * jumpForce);
 
-                } // END OF IF
+                }
+                else
+                {
+                    // Resetting the Jump Animation 
+                    anim.SetBool("isJumping", false);
+
+                } // END OF IF/ELSE 
 
                 // Resetting the Jump Boolean 
                 jump = false;
 
             } // END OF IF
+
 
 
         } // END OF IF
@@ -162,13 +206,13 @@ public class PlayerController : MonoBehaviour
 
 
 
-
     // Used to Flip the Entire Player Sprite and Entities Attaches (From Mini-Quest 2)
     public void FlipX()
     {
         Vector3 theScale = transform.localScale;
         theScale.x = theScale.x * -1;
         transform.localScale = theScale;
+
     } // END OF METHOD
 
 } // END OF CLASS 
