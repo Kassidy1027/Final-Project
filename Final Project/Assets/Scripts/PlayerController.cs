@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     // PRIVATE VARIABLES
 
     // Variable to get the Player's Movement 
-    public float horizontal;
+    private float horizontal;
 
     // Different Player Components
     private Animator anim;
@@ -51,13 +51,13 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
 
     // Variable to Prevent the Player from Double Jumping 
-    private bool jump;
+    private bool isJumping = false;
 
     // Variable to Slow Player Fire Rate 
     private float nextTimeToFire = 0;
 
     // Variable to Delay Time Between Fire 
-    private float fireDelay = .5f;
+    private float fireDelay = .7f;
 
 
     /*
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             // Setting jump to true
-            jump = true;
+            isJumping = true;
 
         } // END OF IF 
 
@@ -127,20 +127,22 @@ public class PlayerController : MonoBehaviour
         // Checking if the Fire Button is Pressed
         if (Input.GetButton("Fire1") && Time.time > nextTimeToFire && !isDead)
         {
+            // Setting the Animator to Show Shooting Animation
+            anim.SetBool("isShooting", true);
+
             // Instantiate the Fire Sprite                      If Statment in one Line (Testing ? True : False)
             Instantiate(fire, firePoint.position, facingDirection == Vector2.left ? Quaternion.Euler(0, 180, 0) : firePoint.rotation);
 
             // Setting up Fire Delay 
             nextTimeToFire = Time.time + fireDelay;
 
-            // Setting the Animator to Show Shooting Animation
-            anim.SetBool("isShooting", true);
         }
         else
         {
             // Resetting the Shooting Animation 
             anim.SetBool("isShooting", false);
-        }
+
+        } // END OF IF/ELSE
 
 
     } // END OF METHOD 
@@ -172,26 +174,20 @@ public class PlayerController : MonoBehaviour
 
 
             // Checking if Player is Jumping and Touching the Ground 
-            if (jump)
+            if (isJumping)
             {
                 if (hitInfo.collider != null)
                 {
                     // Doing the Jump Animation 
-                    anim.SetBool("isJumping", true);
+                    anim.SetBool("isJumping", isJumping);
 
                     // Adding Force to the Player to Jump 
                     rbody.AddForce(Vector2.up * jumpForce);
 
-                }
-                else
-                {
-                    // Resetting the Jump Animation 
-                    anim.SetBool("isJumping", false);
+                } // END OF IF
 
-                } // END OF IF/ELSE 
-
-                // Resetting the Jump Boolean 
-                jump = false;
+                // Starting the Coroutine to Reset Jump Animation 
+                StartCoroutine(JumpAnimationReset());
 
             } // END OF IF
 
@@ -204,6 +200,23 @@ public class PlayerController : MonoBehaviour
 
     } // END OF METHOD 
 
+
+    // Method Called When the Player Runs into 
+
+
+    // Method Called to Reset the Jump Animation 
+    IEnumerator JumpAnimationReset()
+    {
+        // Waiting a few Seconds for the Player to Land
+        yield return new WaitForSeconds(.5f);
+
+        // Resetting the Jump Boolean 
+        isJumping = false;
+
+        // Resetting the Jump Animation 
+        anim.SetBool("isJumping", isJumping);
+
+    } // END OF METHOD 
 
 
     // Used to Flip the Entire Player Sprite and Entities Attaches (From Mini-Quest 2)
