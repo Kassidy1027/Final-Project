@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BasicLevel.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/GraveStoneSection.unity
+    guid: 0f40a7e4c889d7a4584f5b69985d9980
   m_configObjects: {}

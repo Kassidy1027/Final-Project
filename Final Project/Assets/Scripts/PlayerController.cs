@@ -59,6 +59,9 @@ public class PlayerController : MonoBehaviour
     // Variable to Delay Time Between Fire 
     private float fireDelay = .7f;
 
+    // Variable to Hold the MenuController
+    private MenuController menuController = new MenuController();
+
 
     /*
      * UNITY DEFAULT METHODS
@@ -227,5 +230,35 @@ public class PlayerController : MonoBehaviour
         transform.localScale = theScale;
 
     } // END OF METHOD
+
+
+    // Method Called when the Player Runs into Collisions
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Checking if the Player runs into the Ladder at Mid Level 
+        if (collision.gameObject.tag == "MidLadder")
+        {
+            // Updating the Players Position to on Top of the Platform 
+            transform.position = new Vector3(30, .2f, 0);
+
+        }
+        // Checking if the Player runs in to the Ladder at End Level 
+        else if (collision.gameObject.tag == "EndLadder")
+        {
+            // Updating the Players Position to on Top of the Platform 
+            transform.position = new Vector3(44.5f, .2f, 0);
+
+        }
+        // Checking if the Player Runs into the Gravestone
+        else if (collision.gameObject.tag == "GraveStone")
+        {
+            // References Another Method to Change the Scene
+            menuController.LoadLevel(2);
+
+        }
+
+
+
+    } // END OF METHOD 
 
 } // END OF CLASS 
