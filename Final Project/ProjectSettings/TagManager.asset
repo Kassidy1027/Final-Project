@@ -9,6 +9,8 @@ TagManager:
   - GraveStone2
   - GraveStone1
   - GraveStoneLadder
+  - Axe
+  - Stump
   layers:
   - Default
   - TransparentFX

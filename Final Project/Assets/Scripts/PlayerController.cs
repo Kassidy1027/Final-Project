@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  * Kassidy Chase 
@@ -16,7 +17,8 @@ public class PlayerController : MonoBehaviour
 
     // PUBLIC VARIABLES
 
-    // Variable to Hold the Player's Speed 
+    [Header("Player Movement")]
+    // Variable to hold the Players Speed 
     public int speed;
 
     // Variable to Hold the Move Force on the Player
@@ -25,23 +27,27 @@ public class PlayerController : MonoBehaviour
     // Variable to Hold the Jump Force of the Player 
     public float jumpForce; 
 
-    // Variable to get the Player's Facing Direction 
-    public Vector2 facingDirection = Vector2.right;
-
+    [Header("Double Jump Prevention")]
     // Variable to hold the GroundCheck Object
     public GameObject GroundCheck;
 
-    // Variable to hold the Sprite for Attack 
+    [Header("Attack Objects")]
     public GameObject fire;
-
-    // Variable to Hold the Players FirePoint
     public Transform firePoint;
+
+    
+    [Header("Win/Lose Screens")]
+    public CanvasGroup winScreen;
+    public CanvasGroup loseScreen;
 
 
     // PRIVATE VARIABLES
 
     // Variable to get the Player's Movement 
     private float horizontal;
+
+    // Variable to get the Player's Facing Direction 
+    private Vector2 facingDirection = Vector2.right;
 
     // Different Player Components
     private Animator anim;
@@ -60,7 +66,7 @@ public class PlayerController : MonoBehaviour
     private float fireDelay = .7f;
 
     // Variable to Hold the MenuController
-    private MenuController menuController = new MenuController();
+    private MenuController menuController;
 
 
     /*
@@ -73,6 +79,9 @@ public class PlayerController : MonoBehaviour
         // Getting the Player's Components 
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody2D>();
+
+        // Getting the Menu Controller Script
+        menuController = GetComponent<MenuController>();
 
     } // END OF METHOD 
 
@@ -168,7 +177,7 @@ public class PlayerController : MonoBehaviour
             Debug.DrawRay(GroundCheck.transform.position, Vector2.down, Color.red, 1f);
 
             // Player Movement
-            if (rbody.velocity.x < 15 && rbody.velocity.x > -15)
+            if (rbody.velocity.x < 8 && rbody.velocity.x > -8)
             { 
                 // Adding Force and Moving Player 
                 rbody.AddForce(Vector2.right * horizontal * moveForce);
@@ -193,7 +202,6 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(JumpAnimationReset());
 
             } // END OF IF
-
 
 
         } // END OF IF
@@ -260,21 +268,71 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.tag == "GraveStone1")
         {
             // References Another Method to Change the Scene
-            menuController.LoadLevel(2);
+            menuController.LoadScene(2);
 
         }
         // Checking if the Player Runs into the Second GraveStone
         else if (collision.gameObject.tag == "GraveStone2")
         {
             // References Another Method to Change the Scene
-            menuController.LoadLevel(1);
+            menuController.LoadScene(1);
 
             // Setting the Player Position After Reloading the Scene
             transform.position = new Vector3(26.5f, 0.2f, 0);
 
         }
+        // Checking if the Player Runs into the Stump 
+        else if (collision.gameObject.tag == "Stump")
+        {
+            // Checking if the Player has the Axe in Inventory 
+            if (GameManager.instance.inventory.Contains("Axe"))
+            {
+                // Calling the GameOverWin Method 
+                GameOverWin();
+
+            } // END OF IF 
+
+        } // END OF IF/ELSEIF
 
 
+
+    } // END OF METHOD 
+
+
+    // Method for When the Player Runs into the Axe 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Checking if the Player Ran into the Axe 
+        if (collision.gameObject.tag == "Axe")
+        {
+            // Add the Axe to Player Inventory 
+            GameManager.instance.inventory.Add("Axe");
+
+            // Remove the Axe Game Object 
+            Destroy(collision.gameObject);
+
+        } // END OF IF 
+
+    } // END OF METHOD 
+
+
+    // Method to Load Main Menu
+    public void MainMenu()
+    {
+        // Loading the Main Menu Scene 
+        SceneManager.LoadScene(0);
+
+    } // END OF METHOD 
+
+
+    // Method Called When the Player Wins
+    void GameOverWin()
+    {
+        // Setting the Win Screen 
+        winScreen.alpha = 2;
+
+        // Loading Back to the Main Screen 
+        Invoke("MainMenu", 10f);
 
     } // END OF METHOD 
 

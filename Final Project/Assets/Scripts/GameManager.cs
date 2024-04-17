@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     // This will Keep Track of Players Lives 
     public int lives;
 
+    // List to hold the Player's Inventory 
+    public List<string> inventory = new List<string>();
+
 
     /*
      * SINGLETON DESIGN METHOD 
@@ -39,6 +42,15 @@ public class GameManager : MonoBehaviour
 
         // Setting the Objecto not Destory on a Load 
         DontDestroyOnLoad(gameObject);
+
+    } // END OF METHOD 
+
+
+    // Method to be Called to Clear Player Inventory 
+    public void ClearInventory()
+    {
+        // Clearing Player Inventory 
+        inventory.Clear();
 
     } // END OF METHOD 
 

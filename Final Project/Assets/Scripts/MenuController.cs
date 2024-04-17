@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour
      */
 
     // Method Called to Load the Level
-    public void LoadLevel(int index)
+    public void LoadScene(int index)
     {
         // Loading the Scene Based on the Index Given 
         SceneManager.LoadScene(index);
