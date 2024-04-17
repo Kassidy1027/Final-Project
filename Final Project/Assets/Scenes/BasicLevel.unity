@@ -590,7 +590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1755214644681904958, guid: f39426a001c71d84999be2ee63c7d322, type: 3}
       propertyPath: m_TagString
-      value: GraveStone
+      value: GraveStone1
       objectReference: {fileID: 0}
     - target: {fileID: 1755214644681904959, guid: f39426a001c71d84999be2ee63c7d322, type: 3}
       propertyPath: m_SortingOrder
@@ -22497,11 +22497,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4549390661605249223, guid: d69da99ab0b6e674a92d932a6e69f614, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 42.09
+      value: -5.325
       objectReference: {fileID: 0}
     - target: {fileID: 4549390661605249223, guid: d69da99ab0b6e674a92d932a6e69f614, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.71
+      value: -1.79
       objectReference: {fileID: 0}
     - target: {fileID: 4549390661605249223, guid: d69da99ab0b6e674a92d932a6e69f614, type: 3}
       propertyPath: m_LocalPosition.z

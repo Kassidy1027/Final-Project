@@ -249,11 +249,28 @@ public class PlayerController : MonoBehaviour
             transform.position = new Vector3(44.5f, .2f, 0);
 
         }
+        // Checking if the Player Runs into the GraveStone Ladder 
+        else if (collision.gameObject.tag == "GraveStoneLadder")
+        {
+            // Updating the Players Position to on Top of the Platform 
+            transform.position = new Vector3(5.5f, -1.35f, 0);
+
+        }
         // Checking if the Player Runs into the Gravestone
-        else if (collision.gameObject.tag == "GraveStone")
+        else if (collision.gameObject.tag == "GraveStone1")
         {
             // References Another Method to Change the Scene
             menuController.LoadLevel(2);
+
+        }
+        // Checking if the Player Runs into the Second GraveStone
+        else if (collision.gameObject.tag == "GraveStone2")
+        {
+            // References Another Method to Change the Scene
+            menuController.LoadLevel(1);
+
+            // Setting the Player Position After Reloading the Scene
+            transform.position = new Vector3(26.5f, 0.2f, 0);
 
         }
 

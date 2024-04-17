@@ -6,7 +6,9 @@ TagManager:
   tags:
   - EndLadder
   - MidLadder
-  - GraveStone
+  - GraveStone2
+  - GraveStone1
+  - GraveStoneLadder
   layers:
   - Default
   - TransparentFX
