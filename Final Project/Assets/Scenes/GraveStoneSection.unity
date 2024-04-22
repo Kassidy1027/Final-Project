@@ -194,6 +194,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ladder
       objectReference: {fileID: 0}
+    - target: {fileID: 3261066817682409598, guid: f41211a6e39d8ab42a846d7622cabd05, type: 3}
+      propertyPath: m_TagString
+      value: GraveStoneLadder
+      objectReference: {fileID: 0}
     - target: {fileID: 3261066818917458290, guid: f41211a6e39d8ab42a846d7622cabd05, type: 3}
       propertyPath: m_SortingOrder
       value: 1

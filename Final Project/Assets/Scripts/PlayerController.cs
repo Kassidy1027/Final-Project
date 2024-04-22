@@ -65,8 +65,7 @@ public class PlayerController : MonoBehaviour
     // Variable to Delay Time Between Fire 
     private float fireDelay = .7f;
 
-    // Variable to Hold the MenuController
-    private MenuController menuController;
+    
 
 
     /*
@@ -80,8 +79,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody2D>();
 
-        // Getting the Menu Controller Script
-        menuController = GetComponent<MenuController>();
+
 
     } // END OF METHOD 
 
@@ -267,15 +265,15 @@ public class PlayerController : MonoBehaviour
         // Checking if the Player Runs into the Gravestone
         else if (collision.gameObject.tag == "GraveStone1")
         {
-            // References Another Method to Change the Scene
-            menuController.LoadScene(2);
+            // Changing Scene
+            SceneManager.LoadScene(2);
 
         }
         // Checking if the Player Runs into the Second GraveStone
         else if (collision.gameObject.tag == "GraveStone2")
         {
-            // References Another Method to Change the Scene
-            menuController.LoadScene(1);
+            // Changing Sceen
+            SceneManager.LoadScene(1);
 
             // Setting the Player Position After Reloading the Scene
             transform.position = new Vector3(26.5f, 0.2f, 0);
@@ -335,5 +333,8 @@ public class PlayerController : MonoBehaviour
         Invoke("MainMenu", 10f);
 
     } // END OF METHOD 
+
+
+
 
 } // END OF CLASS 
