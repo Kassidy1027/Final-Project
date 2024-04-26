@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 /*
  * Kassidy Chase   
  * 4-15-24
@@ -23,6 +24,7 @@ public class UIController : MonoBehaviour
         SceneManager.LoadScene(index);
 
     } // END OF METHOD 
+
 
     // Method Called to Exit the Game
     public void Exit()

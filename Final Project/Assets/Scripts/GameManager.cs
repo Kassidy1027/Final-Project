@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * Kassidy Chase 
+ * 3-29-24
+ * This Script is the GameManager that is Carried across scenes. Mainly used to Manage Inventory 
+ */
+
+
 public class GameManager : MonoBehaviour
 {
     /*
@@ -12,9 +20,6 @@ public class GameManager : MonoBehaviour
 
     // Instance of the Game Manager Script 
     public static GameManager instance;
-
-    // This will Keep Track of Players Lives 
-    public int lives;
 
     // List to hold the Player's Inventory 
     public List<string> inventory = new List<string>();
@@ -42,15 +47,6 @@ public class GameManager : MonoBehaviour
 
         // Setting the Objecto not Destory on a Load 
         DontDestroyOnLoad(gameObject);
-
-    } // END OF METHOD 
-
-
-    // Method to be Called to Clear Player Inventory 
-    public void ClearInventory()
-    {
-        // Clearing Player Inventory 
-        inventory.Clear();
 
     } // END OF METHOD 
 

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 /*
  * Kassidy Chase 
  * 3-29-24
  * This script will control the Camera in relation to the player. 
  */
+
 
 public class CameraController : MonoBehaviour
 {

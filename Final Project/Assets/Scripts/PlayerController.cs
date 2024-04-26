@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 /*
  * Kassidy Chase 
  * 3-29-24
  * This script will hold the code to control all things about the player. 
  */
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,11 +36,10 @@ public class PlayerController : MonoBehaviour
     [Header("Attack Objects")]
     public GameObject fire;
     public Transform firePoint;
-
     
-    [Header("Win/Lose Screens")]
+    [Header("Win Screen")]
     public CanvasGroup winScreen;
-    public CanvasGroup loseScreen;
+
 
 
     // PRIVATE VARIABLES
@@ -53,9 +54,6 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rbody;
 
-    // Variable to Make sure the Player is Alive 
-    private bool isDead = false;
-
     // Variable to Prevent the Player from Double Jumping 
     private bool isJumping = false;
 
@@ -64,8 +62,6 @@ public class PlayerController : MonoBehaviour
 
     // Variable to Delay Time Between Fire 
     private float fireDelay = .7f;
-
-    
 
 
     /*
@@ -79,9 +75,8 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         rbody = GetComponent<Rigidbody2D>();
 
-
-
     } // END OF METHOD 
+
 
     // Update is called once per frame
     void Update()
@@ -135,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Checking if the Fire Button is Pressed
-        if (Input.GetButton("Fire1") && Time.time > nextTimeToFire && !isDead)
+        if (Input.GetButton("Fire1") && Time.time > nextTimeToFire)
         {
             // Setting the Animator to Show Shooting Animation
             anim.SetBool("isShooting", true);
@@ -165,52 +160,40 @@ public class PlayerController : MonoBehaviour
     // Method the Handle the Physics of the Game 
     private void FixedUpdate()
     {
-        // As Long as Player is not Dead Do Movement  NOTE: Taken from Mini-Quest 2
-        if (!isDead)
-        {
-            // Creating a RayCast so Player Can't Double Jump
-            RaycastHit2D hitInfo = Physics2D.Raycast(GroundCheck.transform.position, Vector2.down, .25f);
+        // Creating a RayCast so Player Can't Double Jump
+        RaycastHit2D hitInfo = Physics2D.Raycast(GroundCheck.transform.position, Vector2.down, .25f);
 
-            // Seeing the Raycast; Will Draw it in the Scene
-            Debug.DrawRay(GroundCheck.transform.position, Vector2.down, Color.red, 1f);
+        // Seeing the Raycast; Will Draw it in the Scene
+        Debug.DrawRay(GroundCheck.transform.position, Vector2.down, Color.red, 1f);
 
-            // Player Movement
-            if (rbody.velocity.x < 8 && rbody.velocity.x > -8)
-            { 
-                // Adding Force and Moving Player 
-                rbody.AddForce(Vector2.right * horizontal * moveForce);
-
-            } // END OF IF
-
-
-            // Checking if Player is Jumping and Touching the Ground 
-            if (isJumping)
-            {
-                if (hitInfo.collider != null)
-                {
-                    // Doing the Jump Animation 
-                    anim.SetBool("isJumping", isJumping);
-
-                    // Adding Force to the Player to Jump 
-                    rbody.AddForce(Vector2.up * jumpForce);
-
-                } // END OF IF
-
-                // Starting the Coroutine to Reset Jump Animation 
-                StartCoroutine(JumpAnimationReset());
-
-            } // END OF IF
-
+        // Player Movement
+        if (rbody.velocity.x < 8 && rbody.velocity.x > -8)
+        { 
+            // Adding Force and Moving Player 
+            rbody.AddForce(Vector2.right * horizontal * moveForce);
 
         } // END OF IF
 
 
+        // Checking if Player is Jumping and Touching the Ground 
+        if (isJumping)
+        {
+            if (hitInfo.collider != null)
+            {
+                // Doing the Jump Animation 
+                anim.SetBool("isJumping", true);
 
+                // Adding Force to the Player to Jump 
+                rbody.AddForce(Vector2.up * jumpForce);
+
+            } // END OF IF
+
+            // Starting the Coroutine to Reset Jump Animation 
+            StartCoroutine(JumpAnimationReset());
+
+        } // END OF IF
 
     } // END OF METHOD 
-
-
-    // Method Called When the Player Runs into 
 
 
     // Method Called to Reset the Jump Animation 
@@ -223,7 +206,7 @@ public class PlayerController : MonoBehaviour
         isJumping = false;
 
         // Resetting the Jump Animation 
-        anim.SetBool("isJumping", isJumping);
+        anim.SetBool("isJumping", false);
 
     } // END OF METHOD 
 
@@ -241,29 +224,8 @@ public class PlayerController : MonoBehaviour
     // Method Called when the Player Runs into Collisions
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Checking if the Player runs into the Ladder at Mid Level 
-        if (collision.gameObject.tag == "MidLadder")
-        {
-            // Updating the Players Position to on Top of the Platform 
-            transform.position = new Vector3(30, .2f, 0);
-
-        }
-        // Checking if the Player runs in to the Ladder at End Level 
-        else if (collision.gameObject.tag == "EndLadder")
-        {
-            // Updating the Players Position to on Top of the Platform 
-            transform.position = new Vector3(44.5f, .2f, 0);
-
-        }
-        // Checking if the Player Runs into the GraveStone Ladder 
-        else if (collision.gameObject.tag == "GraveStoneLadder")
-        {
-            // Updating the Players Position to on Top of the Platform 
-            transform.position = new Vector3(5.5f, -1.35f, 0);
-
-        }
         // Checking if the Player Runs into the Gravestone
-        else if (collision.gameObject.tag == "GraveStone1")
+        if (collision.gameObject.tag == "GraveStone1")
         {
             // Changing Scene
             SceneManager.LoadScene(2);
@@ -276,7 +238,8 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene(1);
 
             // Setting the Player Position After Reloading the Scene
-            transform.position = new Vector3(26.5f, 0.2f, 0);
+            transform.position = new Vector2(26.5f, 0.2f);
+
 
         }
         // Checking if the Player Runs into the Stump 
@@ -309,12 +272,12 @@ public class PlayerController : MonoBehaviour
             // Remove the Axe Game Object 
             Destroy(collision.gameObject);
 
-        } // END OF IF 
+        } // END OF IF  
 
     } // END OF METHOD 
 
 
-    // Method to Load Main Menu
+        // Method to Load Main Menu
     public void MainMenu()
     {
         // Loading the Main Menu Scene 
@@ -330,11 +293,8 @@ public class PlayerController : MonoBehaviour
         winScreen.alpha = 2;
 
         // Loading Back to the Main Screen 
-        Invoke("MainMenu", 10f);
+        Invoke("MainMenu", 8f);
 
     } // END OF METHOD 
-
-
-
 
 } // END OF CLASS 
